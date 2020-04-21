@@ -6,7 +6,7 @@ from docxtpl import DocxTemplate
 # *********************************************************************************************************************
 
 with open('cars_info_txt.txt', 'w') as cars:
-    cars.write("Марка авто     Модель авто     Расход топлива, л/100км    Стоимость, руб \n")
+    cars.write("Марка авто     Модель авто     Расход топлива, л/100км    Стоимость, руб. \n")
     cars.write("Toyota         Land Cruiser            25                 4 000 000  \n")
     cars.write("Nissan         XTrail                  15                 3 000 000  \n")
 
@@ -22,46 +22,44 @@ with open('cars_info_txt.txt', 'r') as cars:
 # Задача 2.
 # Создать doc шаблон, где будут использованы данные параметры.
 # *********************************************************************************************************************
- def context_dict(l):
-     tmp_name_list = ['retailer', 'marka_avt1', 'model_avt1', 'rashod_avt1', 'price_avt1', 'marka_avt2', 'model_avt2',
-                      'model_avt2', 'rashod_avt2', 'price_avt2']
-     cont_dict = {}
-     for i in range (len(tmp_name_list)):
+def context_dict(l):
+    '''
+    :param l: Список значений
+    :return: Формируется cont_dict
+    '''
+    tmp_name_list = ['retailer', 'marka_avt1', 'model_avt1', 'rashod_avt1', 'price_avt1', 'marka_avt2', 'model_avt2',
+                      'rashod_avt2', 'price_avt2']
+    cont_dict = {}
+    for i in range (len(tmp_name_list)):
          cont_dict[tmp_name_list[i]] = l[i]
-     return cont_dict
+    return cont_dict
 
- def gen_price(x, l1, l2):
+def gen_price(x, l1, l2):
      '''
      :param x: Наименование компании
      :param l1: Строка 1
      :param l2: Строка 2
      :return: Создание прайса
      '''
+     # Формируем список значений
      l=[]
      l.append(x)
      l1+=l2
      for i in range (len(l1)):
-         l.append(l1)
+         l.append(l1[i])
 
+     # Наплняем шаблон значениями
      context = context_dict(l)
      doc = DocxTemplate("price.docx")
      doc.render(context)
      doc.save("price-final.docx")
      return
 
-# doc = DocxTemplate("price.docx")
-# context = { 'retailer' : 'ООО Рога и копыта'}
-# doc.render(context)
-# context = {'marka_avt1' : 'Toyota', 'model_avt1':'Land Cruiser', 'rashod_avt1': '25', 'price_avt1': '4 000 000',
-#             'marka_avt2' : 'Nissan', 'model_avt2': 'XTrail',      'rashod_avt2': '15', 'price_avt2': '3 000 000'}
-# doc.render(context)
-# doc.save("price-final.docx")
-
 line1 = ['Toyota','Land Cruiser','25','4 000 000']
 line2 = ['Nissan', 'XTrail', '15', '3 000 000']
 name_ret = 'ООО Рога и копыта'
 
-gen_price(name_ret,line1,line2)
+gen_price(name_ret, line1, line2)
 
 
 # *********************************************************************************************************************
