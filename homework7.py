@@ -1,6 +1,5 @@
 import csv
 import json
-import datetime
 import time
 from docxtpl import DocxTemplate
 
@@ -72,10 +71,10 @@ print('Задача 3.')
 time_1 = time.time()    # start report
 gen_price(name_ret, line1, line2)
 time_2 = time.time()    # stop report
-delta_time = int((time_2 - time_1)*1000)
+delta_time = float(time_2 - time_1)
 
 print('Файл price-final.docx создан.')
-print('время затраченное на отчет', delta_time, ' мс')
+print('время затраченное на отчет', delta_time, ' с')
 
 # *********************************************************************************************************************
 # Задача 4.
@@ -87,6 +86,8 @@ print('Задача 4.')
 car_list = [['Марка авто', 'Модель авто', 'Расход топлива л/100км', 'Стоимость руб.'],
             ['Toyota','Land Cruiser','25','4 000 000'], ['Nissan', 'XTrail', '15', '3 000 000']]
 time_rep = ['Время создания отчета']
+
+# Создаем файл и производим замер времени потраченного на создание отчета
 time_1 = time.time()    # start report
 
 with open('car_price.csv', 'w') as f:
@@ -94,14 +95,13 @@ with open('car_price.csv', 'w') as f:
     writer.writerows(car_list)
 
 time_2 = time.time()    # stop report
-delta_time = int((time_2 - time_1)*1000000)
-print(time_1)
-print(time_2)
-print(delta_time)
+delta_time = float(time_2 - time_1)
+
 time_rep.append(delta_time)
-time_rep.append('мкс')
+time_rep.append('с')
 car_list.append(time_rep)
 
+# Сохраняем файл с указание времени потраченного на создание отчета
 with open('car_price.csv', 'w') as f:
     writer = csv.writer(f)
     writer.writerows(car_list)
@@ -113,23 +113,34 @@ print('Запись в car_price.csv закончена.')
 # Создать json файл с данными о машине.
 # *********************************************************************************************************************
 
-dict_cars_1 = {'brand':'Toyota', 'model':'Land Cruiser', 'raskhod':25, 'price':4000000,}
-# dict_cars_2 = {'brand':'Nissan', 'model':'XTrail', 'raskhod':15, 'price':3000000,}
+dict_cars_1 = {'brand':'Toyota', 'model':'Land Cruiser', 'raskhod':25, 'price':4000000}
 data_cars=[]
+
+# Создаем файл и производим замер времени потраченного на создание отчета
+time_1 = time.time()    # start report
 
 with open('price_json.txt', 'w') as f:
     json.dump(dict_cars_1, f)
-    # json.dump(dict_cars_2, f)
+
+    # Организована задержка, чтобы можно было проверить првильность работы.
+    for i in range(1000000):
+        k=0
+
+time_2 = time.time()    # stop report
+delta_time = float(time_2 - time_1)
+dict_cars_1['Time of creating report'] = delta_time
+
+# Сохраняем файл с указание времени потраченного на создание отчета
+with open('price_json.txt', 'w') as f:
+    json.dump(dict_cars_1, f)
 
 print()
 print('Задача 5.')
 print('Запись в price_json.txt закончена.')
-
 print('Просмотр файла price_json.txt')
 print()
-with open('price_json.txt') as f:
 
-    # for i in f:
+with open('price_json.txt') as f:
     data_cars = json.load(f)
     print(data_cars)
 
